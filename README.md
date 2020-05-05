@@ -10,8 +10,9 @@
 * Events pass EventArgs (event data), it could be empty, one or many
 
 # What is Delegate?
-* Delegates is the pipeline between Event (raiser) and Event Handler (listener)
 * A delegate is a specialized class often called a "Function Pointer"
+* Delegates is the pipeline between Event (raiser) and Event Handler (listener)
+* A delegate is a blueprint for method that data is going to get dumped into the handler
 * Based on a MulticastDelegate base class
 * The Event raiser sends args via delegates to Event handler
 * Ex: Button -> Click Event Raised -> Delegate -> Method Handles Click Event
@@ -19,6 +20,32 @@
 public void btnSubmit_Click(object sender, EventArgs e) {
 	//Handling of button click occurs
 }
+* Delegate base class, Delegate has two important properties and one method
+	- Method : It is the pipeline has to dump data somewhere and you have to define the name of method, where data should go.
+	- Target : The target would be if you have to an object instance where that method lives, then the target would be actual object that has that method.
+	- GetInvocationList() : That ties in the next base class, there is a class called MulticastDelegate that's build into the framework as well.
+
+* Every delegate we create, once it's compiled, will inherit from MulticastDelegate. Its really a way to hold multiple delegates.
+* As mentioned in above line, we can't inherit directly from Delegate or MulticastDelegate, the way we do it is by delegate keyword and kind of a compiler trick
+* When we create a delegate, compiler automatically create a new special class behind the scene which inherits multicast delegate
+
+Ex: 
+1) Delegate - public delegate void WorkPerformedHandler(int hours, WorkType workType)
+2) Delegate Instance - WorkPerformedHandler del1 = new WorkPerformedHandler(WorkPerformed1);
+3) Handler - 
+			static void WorkPerformed1(int hours, WorkType workType)
+			{
+				Console.WriteLine("WorkPerformed1 Called");
+			}
+4) Invoke - del1(5, WorkType.Golf); it will invoke dynamically at run time
+
+* We use += to add multiple delegates in the Invocation List
+	WorkPerformedHandler del1 = new WorkPerformedHandler(WorkPerformed1);
+	WorkPerformedHandler del2 = new WorkPerformedHandler(WorkPerformed2);
+
+	del1 += del2;
+
+	del1(5, WorkType.GoToMeetings); //this will invoke both delegates, by this we can wire up a bunch of notifications
 
 # What is an Event Handler?
 * Event handler is responsible for receiving and processing data from a delegate
@@ -26,3 +53,9 @@ public void btnSubmit_Click(object sender, EventArgs e) {
 	- Sender
 	- EventArgs
 * EventArgs responsible for encapsulating event data
+
+# What is a Multicast Delegate?
+* Can reference more than one delegate function
+* Tracks delegate references using an invocation list
+* Delegates in the list are invoked sequentially
+* It's a synchronous process, and process from top of the list to bottm
