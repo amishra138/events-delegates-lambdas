@@ -2,32 +2,42 @@
 
 namespace EventsDelegatesLambdas
 {
-    public delegate void WorkPerformedHandler(int hours, WorkType workType);
+    
     class Program
     {
         static void Main(string[] args)
         {
-            WorkPerformedHandler del1 = new WorkPerformedHandler(WorkPerformed1);
-            WorkPerformedHandler del2 = new WorkPerformedHandler(WorkPerformed2);
+            // 1
+            //SimpleDelegate.Call();
 
-            DoWork(del1);
+            // 2
+            //MultiCastDelegates.Call();
 
+            //3
+            //ReturnValuesFromDelegate.Call();
+
+            //4
+            //var worker = new WorkerWithAdvance();
+            //worker.WorkPerformed += new EventHandler<WorkPerformedEventArgs>(worker.Worker_WorkPerformed);
+            //worker.WorkCompleted += new EventHandler(worker.Worker_WorkCompleted);
+            //worker.DoWork(2, WorkType.GenerateReports);
+
+            //5 - Delegate Inference
+            //var worker = new WorkerWithAdvance();
+            //worker.WorkPerformed += worker.Worker_WorkPerformed;
+            //worker.WorkCompleted += worker.Worker_WorkCompleted;
+
+            //worker.WorkCompleted -= worker.Worker_WorkCompleted;
+            //worker.DoWork(2, WorkType.GenerateReports);
+
+            //6 - Anonymous method
+            var worker = new WorkerWithAdvance();
+            worker.WorkPerformed += delegate (object sender, WorkPerformedEventArgs e)
+            {
+                Console.WriteLine(e.Hours.ToString());
+            };
+            worker.DoWork(2, WorkType.GenerateReports);
             Console.ReadKey();
-        }
-
-        static void DoWork(WorkPerformedHandler del)
-        {
-            del(5, WorkType.GoToMeetings);
-        }
-
-        static void WorkPerformed1(int hours, WorkType workType)
-        {
-            Console.WriteLine("WorkPerformed1 called " + hours.ToString());
-        }
-
-        static void WorkPerformed2(int hours, WorkType workType)
-        {
-            Console.WriteLine("WorkPerformed2 called " + hours.ToString());
         }
 
     }
