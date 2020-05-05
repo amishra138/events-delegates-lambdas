@@ -108,3 +108,8 @@ What if you want to attach an event handler directly to an event?
 			}
 
 *Use when we have simple function and don't want to use anywhere.
+
+# .net built in delegates
+* The .net framework provides several different delegates that provide flexible options:
+	- Action<T> : one way pipeline, accepts a single parameter and returns no value
+	- Func<T,TResult>  : two way pipeline, accepts a single parameter and returns a	value of type TResult
